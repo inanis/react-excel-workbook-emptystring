@@ -83,7 +83,7 @@ export class Workbook extends Component {
     element: PropTypes.any,
     children: function (props, propName, componentName) {
       React.Children.forEach(props[propName], child => {
-        if (child.type !== Sheet) {
+      if (child && child.type !== Sheet) {
           throw new Error('<Workbook> can only have <Sheet>\'s as children. ')
         }
       })
@@ -116,12 +116,15 @@ export class Workbook extends Component {
 
   download () {
     const wb = {
-      SheetNames: React.Children.map(this.props.children, sheet => sheet.props.name),
+      SheetNames: [],
       Sheets: {}
     }
 
     React.Children.forEach(this.props.children, sheet => {
-      wb.Sheets[sheet.props.name] = sheet_from_array_of_arrays(this.createSheetData(sheet))
+      if(sheet){
+        wb.SheetNames.push(sheet.props.name);
+        wb.Sheets[sheet.props.name] = sheet_from_array_of_arrays(this.createSheetData(sheet))
+      }
     })
 
     const wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'})
