@@ -26,7 +26,7 @@ function sheet_from_array_of_arrays(data, columns) {
       if (range.e.r < R) range.e.r = R;
       if (range.e.c < C) range.e.c = C;
       var cell = { v: data[R][C] };
-      var numFmt = columns.props.numFmt;
+      var numFmt = columns[C].props.numFmt;
       if (cell.v == null) continue;
       var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
 
